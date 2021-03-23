@@ -6,7 +6,7 @@ ggplot(yearlyData, aes(Age, R)) + geom_bar(stat = "identity") +
   labs(title = "2020 Deaths", x = "Age group", y = "Deaths")
 
 
-# Plot#2 showing 
+# Plot#2 showing weekly mortality for specific years
 test <- data.frame()
 for (year in 2016:2021) {
   
