@@ -1,0 +1,25 @@
+{
+    "id": "831E3EDF",
+    "path": "D:/Projekty/R/deaths/deaths/prepare_data.R",
+    "project_path": "prepare_data.R",
+    "type": "r_source",
+    "hash": "811982295",
+    "contents": "",
+    "dirty": false,
+    "created": 1616364301635.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "tempName": "Untitled1",
+        "cursorPosition": "24,43",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1616364776,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1616364776854,
+    "read_only": false,
+    "read_only_alternatives": []
+}
