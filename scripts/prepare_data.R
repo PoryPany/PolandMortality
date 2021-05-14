@@ -5,6 +5,7 @@ loadData <- function(genders = "A", years = 2000:2021) {
   for (year in years) {
     for (gender in genders) {
       
+      # A - all, M - male, F - female
       if (gender == "A")      sheetPage <- 1
       else if (gender == "M") sheetPage <- 2
       else if (gender == "W") sheetPage <- 3
