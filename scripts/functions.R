@@ -48,3 +48,5 @@ yearlyDeathsByGroups <- function(m_data) {
   return(yearlyData)
   
 }
+
+# komentarz
