@@ -42,11 +42,31 @@ yearlyDeathsByGroups <- function(m_data) {
   m_data <- getByRegions(m_data)
   
   yearlyData <- m_data[1]
-  yearlyData <- cbind(yearlyData, "R" = rowSums(m_data[4:length(m_data)]))
+  yearlyData <- cbind(yearlyData, "R" = rowSums(m_data[4:length(m_data)],
+                                                na.rm = T))
+  
   yearlyData$Age <- factor(yearlyData$Age, levels = yearlyData$Age)
   
   return(yearlyData)
   
 }
 
-# komentarz
+yearlyDeathsByRegions <- function(m_data) {
+  
+  m_data <- getByRegions(m_data,3)
+  
+  yearlyData <- m_data[3]
+  yearlyData <- cbind(yearlyData, "R" = rowSums(m_data[4:length(m_data)],
+                                                na.rm = T))
+  yearlyData <- yearlyData[yearlyData$Region != "Warszawski stołeczny",]
+  yearlyData <- setNames(aggregate(yearlyData$R, 
+                                   by = list(yearlyData$Region), 
+                                   FUN = sum),
+                         c("Region", "Deaths"))
+  
+  yearlyData$Region <- factor(yearlyData$Region, 
+                              levels = yearlyData$Region)
+  
+  return(yearlyData)
+  
+}
