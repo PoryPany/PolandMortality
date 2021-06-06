@@ -43,3 +43,28 @@ loadData <- function(genders = "A", years = 2000:2021) {
   }
   
 }
+
+loadLifeExpect <- function(yrs = 1990:2019){
+  
+  require("readxl")
+  
+  for (yr in yrs){
+    leData <- data.frame(
+      read_excel(
+        path = "data/tablice_trwania_zycia_1990-2019.xls", 
+        sheet = yr, 
+        skip = 3, 
+      )
+    )
+    colnames(leData) <- c("Sex","Age","Number of survivors",
+                         "Probability of death","Number of dead",
+                         "Stationary population",
+                         "Cumulated stationary population",
+                         "Average life expectancy")
+    
+    name <- paste("LE",yr,sep= '')
+    
+    assign(name, leData, envir = globalenv())
+    message(name, " loaded!")
+  }
+}

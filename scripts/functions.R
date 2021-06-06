@@ -70,3 +70,30 @@ yearlyDeathsByRegions <- function(m_data) {
   return(yearlyData)
   
 }
+
+
+gendExp <- function(x){
+  
+  x <- split(x,x$Sex)
+  feE <- as.data.frame(x[2])
+  colnames(feE) <- c("Sex","Age","Number of survivors",
+                        "Probability of death","Number of dead",
+                        "Stationary population",
+                        "Cumulated stationary population",
+                        "Average life expectancy")
+  
+  mE <- as.data.frame(x[1])
+  colnames(mE) <- c("Sex","Age","Number of survivors",
+                        "Probability of death","Number of dead",
+                        "Stationary population",
+                        "Cumulated stationary population",
+                        "Average life expectancy")
+  
+  assign("maleExp", mE, envir = globalenv())
+  message("maleExp"," loaded!")
+  assign("femaleExp", feE, envir = globalenv())
+  message("femaleExp"," loaded!")
+}
+
+
+

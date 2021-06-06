@@ -30,16 +30,16 @@ data <- yearlyDeathsByRegions(A2021)
 
 
 # mapa testy
-install.packages(c("ggplot2", "sf", "rnaturalearth", "rnaturalearthdata",
-                   "googleway", "ggrepel", "libwgeom", "rnaturalearthhires"))
-devtools::install_github("ropensci/rnaturalearthhires")
+#install.packages(c("ggplot2", "sf", "rnaturalearth", "rnaturalearthdata",
+                   #"googleway", "ggrepel", "libwgeom", "rnaturalearthhires"))
+#devtools::install_github("ropensci/rnaturalearthhires")
 library("ggplot2")
 library("sf")
 library("rnaturalearth")
 library("rnaturalearthdata")
 library("rnaturalearthhires")
 
-install.packages("devtools")
+#install.packages("devtools")
 library("devtools")
 
 theme_set(theme_bw())
@@ -60,3 +60,38 @@ ggplot(data = PolandMapData) +
                        guide = "colourbar", aesthetics = "colour") +
   coord_sf(xlim = c(13,25), ylim = c(48.75, 55), expand = F) +
   ggsave("plots/plot#3.png", width = 7, height = 7)
+
+
+#install.packages("gganimate")
+library(gganimate)
+#install.packages("hrbrthemes")
+library(hrbrthemes)
+library(tidyverse)
+#install.packages("gifski")
+library(gifski)
+#install.packages("gif")
+library(gif)  
+
+anim <- function(x){
+  m <- as.factor(x$Sex)
+  levels(m) <- c("Male","Female")
+p_LE <- x%>% 
+  ggplot(aes(x=Age,y=`Probability of death`,group=Sex,color=m)) +
+  geom_line(size=1.5) + ylim(0, max(test$Deaths)) +
+  ggtitle("Probability of death animation") +
+  scale_color_viridis_d("Sex") +
+  theme_ipsum() +
+  ggsave("animation/LE_plot.png", width = 7, height = 7)
+
+  p_LE.animation = p_LE+
+  transition_reveal(Age)+
+  view_follow(fixed_y=T)
+
+  #saving animation
+  animate(p_LE.animation, duration = 3, fps = 8, width = 800, height = 700,
+          renderer = gifski_renderer("animation/LE_animation.gif",loop=T))
+  
+} 
+
+
+
