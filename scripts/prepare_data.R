@@ -52,7 +52,7 @@ loadLifeExpect <- function(yrs = 1990:2019){
     leData <- data.frame(
       read_excel(
         path = "data/tablice_trwania_zycia_1990-2019.xls", 
-        sheet = yr, 
+        sheet = yr-1989, 
         skip = 3, 
       )
     )
