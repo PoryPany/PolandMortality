@@ -95,5 +95,23 @@ gendExp <- function(x){
   message("femaleExp"," loaded!")
 }
 
-
+avgWeeklyDeaths <- function(yrs = 2000:2021){
+   
+    year <- 2000:2021
+    AWD <- c()
+    for (yr in yrs){
+      AWD[yr-1999] <- mean(weeklyDeaths(get(paste("A",yr,sep="")),
+                     yr)$Deaths[!is.na(weeklyDeaths(get(paste("A",
+                                         yr,sep="")),yr)$Deaths)])
+    }
+    awd <- data.frame(year,AWD)
+    n <- vapply(awd, is.numeric, FUN.VALUE = logical(1))
+    awd[,n] <- round(awd[,n], digits = 0)
+    awd[,-2] <- round(awd[,-2],0)
+    colnames(awd) <- c("Year","Average weekly deaths")
+    assign("aWD",awd,envir = globalenv())
+  
+  
+}
+  
 
