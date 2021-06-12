@@ -102,18 +102,19 @@ getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 barAnim <- function(){plot5 <- aWD%>%
 ggplot(aes(x=Year,y=`Average weekly deaths`)) + 
   geom_bar(position = "dodge",stat = "identity",fill = getPalette(colCount)) + 
-  geom_text(aes(label=`Average weekly deaths`), position=position_dodge(width=0.9), vjust=-0.25) +
+  geom_text(aes(label=`Average weekly deaths`), position=position_dodge(width=0.9), vjust=-0.55) +
   theme_ipsum() +
   labs(title = "Average weekly deaths by years", x = "Year", y = "Deaths") +
   ylim(0, 11500) +
   ggsave("plots/plot#5_bar.png", width = 13, height = 7) +
   transition_states(
     `Average weekly deaths`,
-    transition_length = 3,
-    state_length = 0
+    transition_length = 0.3,
+    state_length = 0,
+    wrap=F
   )+
   shadow_mark()
-  animate(plot5,duration = 10, fps=25, width = 1400, height = 700,
+  animate(plot5,nframes=150, fps=30 , width = 1400, height = 700,
           renderer = gifski_renderer("animation/barP_animation.gif",loop=F))
 } 
 
