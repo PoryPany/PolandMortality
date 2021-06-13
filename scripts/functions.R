@@ -33,6 +33,7 @@ weeklyDeathsByGroups <- function(m_data) {
   m_data <- getByRegions(m_data)
   
   groupsData <- m_data[c(1, 4:length(m_data))]
+  
   groupsData$Age <- factor(groupsData$Age, levels = groupsData$Age)
   
   return(groupsData)
