@@ -71,7 +71,8 @@ for (library_ in libraries) {
   library(library_, character.only = T)
 }
 
-anim <- function(x){
+#Plot#4 Animation and plot showing life expectancy by sex
+lineAnim <- function(x){
   m <- as.factor(x$Sex)
   levels(m) <- c("Male","Female")
 p_LE <- x%>% 
@@ -80,17 +81,41 @@ p_LE <- x%>%
   ggtitle("Probability of death animation") +
   scale_color_viridis_d("Sex") +
   theme_ipsum() +
-  ggsave("animation/LE_plot.png", width = 7, height = 7)
+  ggsave("plots/plot#4_LE.png", width = 7, height = 7)
 
   p_LE.animation = p_LE+
   transition_reveal(Age)+
   view_follow(fixed_y=T)
 
   #saving animation
-  animate(p_LE.animation, duration = 3, fps = 8, width = 800, height = 700,
+  animate(p_LE.animation, duration = 5, fps = 30, width = 800, height = 700,
           renderer = gifski_renderer("animation/LE_animation.gif",loop=T))
   
 } 
+library(RColorBrewer)
+
+# Plot#5, Animation and plot showing average weekly deaths by years
+colCount = 22
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
+barAnim <- function(){plot5 <- aWD%>%
+ggplot(aes(x=Year,y=`Average weekly deaths`)) + 
+  geom_bar(position = "dodge",stat = "identity",fill = getPalette(colCount)) + 
+  geom_text(aes(label=`Average weekly deaths`), position=position_dodge(width=0.9), vjust=-0.55) +
+  theme_ipsum() +
+  labs(title = "Average weekly deaths by years", x = "Year", y = "Deaths") +
+  ylim(0, 11500) +
+  ggsave("plots/plot#5_bar.png", width = 13, height = 7) +
+  transition_states(
+    `Average weekly deaths`,
+    transition_length = 0.3,
+    state_length = 0,
+    wrap=F
+  )+
+  shadow_mark()
+  animate(plot5,nframes=150, fps=30 , width = 1400, height = 700,
+          renderer = gifski_renderer("animation/barP_animation.gif",loop=F))
+} 
 
 
-
+  
