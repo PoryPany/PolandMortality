@@ -5,27 +5,34 @@ for (library_ in libraries) {
 }
 
 # Plot#1, showing mortality by age groups
-yearlyData <- yearlyDeathsByGroups(A2021)
-ggplot(yearlyData, aes(Age, R)) + geom_bar(stat = "identity") + 
-  labs(title = "2020, mortality by age groups", x = "Age group", y = "Deaths") +
-  ggsave("plots/plot#1.png", width = 13, height = 7)
-
-
-# Plot#2, showing weekly mortality for specific years
-test <- data.frame()
-for (year in 2019:2021) {
+showMortalityBarPlot <- function(year) {
   
-  varName <- paste("A", year, sep = '')
-  test <- rbind(test, weeklyDeaths(get(varName), year))
+  yearlyData <- yearlyDeathsByGroups(get(paste("A", year, sep = '')))
+  ggplot(yearlyData, aes(Age, R)) + geom_bar(stat = "identity") + 
+    labs(title = paste(year, ", mortality by age groups", sep = ''), 
+         x = "Age group", y = "Deaths") +
+    ggsave("plots/plot#1.png", width = 13, height = 7)
   
 }
+showMortalityBarPlot(2004)
 
-Weeks <- factor(test$Week, labels = 1:53)
-ggplot(test, aes(x = Weeks, y = Deaths, 
-                 group = Year, color = Year)) +
-  geom_line(size = 3) + ylim(0, max(test$Deaths)) +
-  ggsave("plots/plot#2.png", width = 13, height = 7)
-
+# Plot#2, showing weekly mortality for specific years
+showWeeklyMortality <- function(years) {
+  
+  tmpData <- data.frame()
+  for (year in years) {
+    varName <- paste("A", year, sep = '')
+    tmpData <- rbind(tmpData, weeklyDeaths(get(varName), year))
+  }
+  
+  Weeks <- factor(tmpData$Week, labels = 1:53)
+  ggplot(tmpData, aes(x = Weeks, y = Deaths, 
+                   group = Year, color = Year)) +
+    geom_line(size = 3) + ylim(0, max(tmpData$Deaths)) +
+    ggsave("plots/plot#2.png", width = 13, height = 7)
+  
+}
+showWeeklyMortality(2019:2021)
 
 # Plot#3, map
 showMortalityMap <- function(year) {
@@ -60,7 +67,7 @@ showMortalityMap <- function(year) {
     ggsave("plots/plot#3.png", width = 7, height = 7)
   
 }
-showMortalityMap(2008)
+showMortalityMap(2020)
 
 
 # Animation
