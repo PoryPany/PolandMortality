@@ -117,9 +117,11 @@ ggplot(aes(x=Year,y=`Average weekly deaths`)) +
     `Average weekly deaths`,
     transition_length = 0.3,
     state_length = 0,
-    wrap=F
+    wrap = F
   )+
+  ease_aes("bounce-in")+
   shadow_mark()
+
   animate(plot5,nframes=150, fps=30 , width = 1400, height = 700,
           renderer = gifski_renderer("animation/barP_animation.gif",loop=F))
 } 
