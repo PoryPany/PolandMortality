@@ -1,5 +1,9 @@
 loadData <- function(genders = "A", years = 2000:2021) {
   
+  # This function is loading data from files in 'data' folder.
+  # You can choose gender (All, Male, Female) and years 
+  # from 2000 to 2021
+  
   require("readxl")
   
   for (year in years) {
@@ -13,25 +17,29 @@ loadData <- function(genders = "A", years = 2000:2021) {
       # From 105-106th row, data is more specific
       mData <- data.frame(
         read_excel(
-          path = paste("data/", year, ".xlsx", sep = ''), 
+          path = paste("data/Zgony według tygodni w Polsce_", 
+                       year, ".xlsx", sep = ''), 
           sheet = sheetPage, 
-          skip = if (year > 2019) 105 else 106, 
+          skip = if (year > 2019) 105 else 106,
           .name_repair = "minimal"
         )
       )
       
+      # Setting each column length to 56 for plots
       columns <- dim(mData)[2]
       if (columns <= 55) {
         for (week in (columns+1):56)
           mData <- cbind(mData, tempT = NA)
       }
         
+      # Setting column names
       names(mData) <- c("Age", "RegionCode", "Region", 
                         paste("T", 1:(length(mData) - 3), sep = ''))
       
       varName <- paste(gender, year, sep = '')
       rows <- dim(mData)[1]
       
+      # Error checking
       if (rows == 1862) {
         assign(varName, mData, envir = globalenv())
         message(varName, " loaded!")
@@ -67,4 +75,5 @@ loadLifeExpect <- function(yrs = 1990:2019){
     assign(name, leData, envir = globalenv())
     message(name, " loaded!")
   }
+  
 }

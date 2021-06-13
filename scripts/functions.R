@@ -8,6 +8,7 @@ getByRegions <- function(m_data, choice = 1) {
   
 }
 
+
 weeklyDeaths <- function(m_data, year) {
   
   m_data <- getByRegions(m_data)
@@ -26,6 +27,7 @@ weeklyDeaths <- function(m_data, year) {
   
 }
 
+
 weeklyDeathsByGroups <- function(m_data) {
   
   m_data <- getByRegions(m_data)
@@ -36,6 +38,7 @@ weeklyDeathsByGroups <- function(m_data) {
   return(groupsData)
   
 }
+
 
 yearlyDeathsByGroups <- function(m_data) {
   
@@ -50,6 +53,7 @@ yearlyDeathsByGroups <- function(m_data) {
   return(yearlyData)
   
 }
+
 
 yearlyDeathsByRegions <- function(m_data) {
   
@@ -68,6 +72,44 @@ yearlyDeathsByRegions <- function(m_data) {
                               levels = yearlyData$Region)
   
   return(yearlyData)
+  
+}
+
+
+dataForMap <- function(year) {
+  
+  data <- yearlyDeathsByRegions(get(paste("A", year, sep = '')))
+  population <- getPopulationData(year)
+  data[1] <- population[1]
+  
+  data <- merge(data, population)
+  
+  # Necessary to properly show mortality data on map
+  dataOrder <- c(12,6,9,1,8,10,14,4,16,3,11,7,5,2,15,13)
+  
+  return(data[dataOrder,])
+  
+}
+
+
+getPopulationData <- function(year) {
+  
+  # This function loads data from file 'roczna_ludnosc' prepared
+  # by Albert Gawin. This file contains population data 
+  # separated by years from 2004 to 2020
+  
+  require("readxl")
+  
+  population <- data.frame(
+    read_excel(
+      path = "data/roczna_ludnosc.xlsx"
+    )
+  )
+  
+  colnames(population) <- c("Region", paste("Population_", 2004:2020, sep = ''))
+  
+  
+  return(population[c("Region", paste("Population_", year, sep = ''))])
   
 }
 

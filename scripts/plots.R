@@ -1,9 +1,13 @@
-require("ggplot2")
+# Please, load these libraries before making plots
+libraries <- c("ggplot2", "sf", "rnaturalearth", "rnaturalearthdata")
+for (library_ in libraries) {
+  library(library_, character.only = T)
+}
 
 # Plot#1, showing mortality by age groups
 yearlyData <- yearlyDeathsByGroups(A2021)
 ggplot(yearlyData, aes(Age, R)) + geom_bar(stat = "identity") + 
-  labs(title = "2020 Deaths", x = "Age group", y = "Deaths") +
+  labs(title = "2020, mortality by age groups", x = "Age group", y = "Deaths") +
   ggsave("plots/plot#1.png", width = 13, height = 7)
 
 
@@ -24,53 +28,48 @@ ggplot(test, aes(x = Weeks, y = Deaths,
 
 
 # Plot#3, map
-data <- yearlyDeathsByRegions(A2021)
+showMortalityMap <- function(year) {
+  
+  # This function is showing mortality in percentages for every region 
+  
+  currentYear <- as.numeric(format(Sys.Date(), '%Y'))
+  if (year > currentYear) {
+    return("You serious?")
+  } else if (year < 2004 | year > 2020) {
+    return(paste("There is no population data for", year, "year."))
+  }
+  
+  mapData <- dataForMap(year)
+  
+  PolandMapData <- ne_countries(scale = "medium", country = "Poland", 
+                                returnclass = "sf")
+  
+  States <- ne_states(country = "Poland", returnclass = "sf")
+  States$name_pl <- mapData$Region
+  
+  Mortality = mapData$Deaths/
+    mapData[,paste("Population_", year, sep = '')] * 100
+  
+  ggplot(data = PolandMapData) +
+    geom_sf(data = States, aes(fill = Mortality)) +
+    scale_fill_viridis_c(alpha = 0.9, option = "E",
+                         begin = 0, end = 1, values = c(0.5, 1)) +
+    coord_sf(xlim = c(13.5, 24.5), ylim = c(48.75, 55), expand = FALSE) +
+    ylim(0, 2) + 
+    ggtitle(paste(year, ", mortality in %", sep = '')) +
+    ggsave("plots/plot#3.png", width = 7, height = 7)
+  
+}
+showMortalityMap(2008)
 
 
-
-
-# mapa testy
-#install.packages(c("ggplot2", "sf", "rnaturalearth", "rnaturalearthdata",
-                   #"googleway", "ggrepel", "libwgeom", "rnaturalearthhires"))
-#devtools::install_github("ropensci/rnaturalearthhires")
-library("ggplot2")
-library("sf")
-library("rnaturalearth")
-library("rnaturalearthdata")
-library("rnaturalearthhires")
-
-#install.packages("devtools")
-library("devtools")
-
-theme_set(theme_bw())
-
-PolandMapData <- ne_countries(scale = "medium", country = "Poland", 
-                              returnclass = "sf")
-
-States <- ne_states(country = "Poland", returnclass = "sf")
-
-#link 
-#https://ggplot2.tidyverse.org/reference/scale_viridis.html
-#https://r-spatial.org/r/2018/10/25/ggplot2-sf-2.html
-ggplot(data = PolandMapData) +
-  geom_sf() +
-  geom_sf(data = States, aes(fill = data$Deaths)) +
-  scale_fill_viridis_c(alpha = 1, begin = 0, end = 1, direction = -1,
-                       option = "D", values = NULL, space = "Lab",
-                       guide = "colourbar", aesthetics = "colour") +
-  coord_sf(xlim = c(13,25), ylim = c(48.75, 55), expand = F) +
-  ggsave("plots/plot#3.png", width = 7, height = 7)
-
-
-#install.packages("gganimate")
-library(gganimate)
-#install.packages("hrbrthemes")
-library(hrbrthemes)
-library(tidyverse)
-#install.packages("gifski")
-library(gifski)
-#install.packages("gif")
-library(gif)  
+# Animation
+# Please, load these libraries before making plots
+libraries <- c("gganimate", "hrbrthemes", "tidyverse", 
+               "gifski", "gif")
+for (library_ in libraries) {
+  library(library_, character.only = T)
+}
 
 anim <- function(x){
   m <- as.factor(x$Sex)
