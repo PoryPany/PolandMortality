@@ -117,6 +117,9 @@ getPopulationData <- function(year) {
 
 gendExp <- function(x){
   
+  # This function takes Life Expectancy data frame as an argument and splits it
+  # into 2 dataframes by sex
+  
   x <- split(x,x$Sex)
   feE <- as.data.frame(x[2])
   colnames(feE) <- c("Sex","Age","Number of survivors",
@@ -139,6 +142,10 @@ gendExp <- function(x){
 }
 
 avgWeeklyDeaths <- function(yrs = 2000:2021){
+  
+    # This function takes data from weeklyDeaths() function and
+    # calculates average weekly deaths for every year in our data and
+    # creates data frame containing years and average weekly deaths for this years
    
     year <- 2000:2021
     AWD <- c()

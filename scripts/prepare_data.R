@@ -56,6 +56,7 @@ loadLifeExpect <- function(yrs = 1990:2019){
   
   require("readxl")
   
+    # Loading data from .xls
   for (yr in yrs){
     leData <- data.frame(
       read_excel(
@@ -64,6 +65,8 @@ loadLifeExpect <- function(yrs = 1990:2019){
         skip = 3, 
       )
     )
+    
+    # Setting column names
     colnames(leData) <- c("Sex","Age","Number of survivors",
                          "Probability of death","Number of dead",
                          "Stationary population",

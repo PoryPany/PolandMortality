@@ -84,8 +84,11 @@ for (library_ in libraries) {
 
 #Plot#4 Animation and plot showing life expectancy by sex
 lineAnim <- function(x){
+  
   m <- as.factor(x$Sex)
   levels(m) <- c("Male","Female")
+  
+  # creating plot and animating it
 p_LE <- x%>% 
   ggplot(aes(x=Age,y=`Probability of death`,group=Sex,color=m)) +
   geom_line(size=1.5) + ylim(0, max(test$Deaths)) +
@@ -99,8 +102,10 @@ p_LE <- x%>%
   view_follow(fixed_y=T)
 
   #saving animation
+  
   animate(p_LE.animation, duration = 5, fps = 30, width = 800, height = 700,
           renderer = gifski_renderer("animation/LE_animation.gif",loop=T))
+  
   
 } 
 library(RColorBrewer)
@@ -109,10 +114,12 @@ library(RColorBrewer)
 colCount = 22
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
+# creating plot and animating it
 barAnim <- function(){plot5 <- aWD%>%
 ggplot(aes(x=Year,y=`Average weekly deaths`)) + 
   geom_bar(position = "dodge",stat = "identity",fill = getPalette(colCount)) + 
-  geom_text(aes(label=`Average weekly deaths`), position=position_dodge(width=0.9), vjust=-0.55) +
+  geom_text(aes(label=`Average weekly deaths`),
+            position=position_dodge(width=0.9), vjust=-0.55) +
   theme_ipsum() +
   labs(title = "Average weekly deaths by years", x = "Year", y = "Deaths") +
   ylim(0, 11500) +
@@ -123,11 +130,11 @@ ggplot(aes(x=Year,y=`Average weekly deaths`)) +
     state_length = 0,
     wrap = F
   )+
-  ease_aes("bounce-in")+
   shadow_mark()
 
-  animate(plot5,nframes=150, fps=30 , width = 1400, height = 700,
-          renderer = gifski_renderer("animation/barP_animation.gif",loop=F))
+# saving animation
+  animate(plot5,nframes=300, fps=30 , width = 1400, height = 700,
+          renderer = gifski_renderer("animation/barP_animation.gif",loop=T),end_pause=100)
 } 
 
 
