@@ -1,5 +1,5 @@
 # Please, load these libraries before making plots
-libraries <- c("ggplot2", "sf", "rnaturalearth", "rnaturalearthdata")
+libraries <- c("ggplot2", "ggthemes", "sf", "rnaturalearth", "rnaturalearthdata")
 for (library_ in libraries) {
   library(library_, character.only = T)
 }
@@ -11,6 +11,7 @@ showMortalityBarPlot <- function(year) {
   ggplot(yearlyData, aes(Age, R)) + geom_bar(stat = "identity") + 
     labs(title = paste(year, ", mortality by age groups", sep = ''), 
          x = "Age group", y = "Deaths") +
+    theme_fivethirtyeight() +
     ggsave("plots/plot#1.png", width = 13, height = 7)
   
 }
@@ -29,6 +30,7 @@ showWeeklyMortality <- function(years) {
   ggplot(tmpData, aes(x = Weeks, y = Deaths, 
                    group = Year, color = Year)) +
     geom_line(size = 3) + ylim(0, max(tmpData$Deaths)) +
+    theme_fivethirtyeight() +
     ggsave("plots/plot#2.png", width = 13, height = 7)
   
 }
@@ -59,15 +61,17 @@ showMortalityMap <- function(year) {
   
   ggplot(data = PolandMapData) +
     geom_sf(data = States, aes(fill = Mortality)) +
-    scale_fill_viridis_c(alpha = 0.9, option = "E",
-                         begin = 0, end = 1, values = c(0.5, 1)) +
+    scale_fill_viridis_c(alpha = 1, option = "E",
+                         begin = 0, end = 0.7, direction = -1) +
     coord_sf(xlim = c(13.5, 24.5), ylim = c(48.75, 55), expand = FALSE) +
     ylim(0, 2) + 
     ggtitle(paste(year, ", mortality in %", sep = '')) +
+    theme_fivethirtyeight() +
     ggsave("plots/plot#3.png", width = 7, height = 7)
   
 }
 showMortalityMap(2020)
+
 
 
 # Animation
